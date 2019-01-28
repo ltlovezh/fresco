@@ -55,7 +55,7 @@ public abstract class AbstractProducerToDataSourceAdapter<T> extends AbstractDat
     if (FrescoSystrace.isTracing()) {
       FrescoSystrace.beginSection("AbstractProducerToDataSourceAdapter()->produceResult");
     }
-    producer.produceResults(createConsumer(), settableProducerContext);
+    producer.produceResults(createConsumer(), settableProducerContext); //此时就触发生产啦？
     if (FrescoSystrace.isTracing()) {
       FrescoSystrace.endSection();
     }

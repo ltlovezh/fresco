@@ -304,7 +304,7 @@ public class ImageRequest {
 
   /**
    * This is a utility method which returns the type of Uri
-   * @param uri The Uri to test
+   * @param uri The Uri to test 判断Uri的类型
    * @return The type of the given Uri if available or SOURCE_TYPE_UNKNOWN if not
    */
   private static @SourceUriType int getSourceUriType(final Uri uri) {

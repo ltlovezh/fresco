@@ -33,7 +33,7 @@ public class CloseableProducerToDataSourceAdapter<T>
       FrescoSystrace.beginSection("CloseableProducerToDataSourceAdapter#create");
     }
     CloseableProducerToDataSourceAdapter<T> result =
-        new CloseableProducerToDataSourceAdapter<T>(producer, settableProducerContext, listener);
+        new CloseableProducerToDataSourceAdapter<T>(producer, settableProducerContext, listener); // 基于Producer创建DataSource
     if (FrescoSystrace.isTracing()) {
       FrescoSystrace.endSection();
     }

@@ -234,7 +234,7 @@ public class AnimatedDrawableBackendImpl implements AnimatedDrawableBackend {
       mRenderDstRect.set(0, 0, frameWidth, frameHeight);
 
       canvas.save();
-      canvas.translate(xOffset, yOffset);
+      canvas.translate(xOffset, yOffset); // 把GIF帧绘制到指定位置上去
       canvas.drawBitmap(mTempBitmap, mRenderSrcRect, mRenderDstRect, null);
       canvas.restore();
     }

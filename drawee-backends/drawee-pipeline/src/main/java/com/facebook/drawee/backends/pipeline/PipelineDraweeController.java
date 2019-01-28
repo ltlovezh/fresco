@@ -329,7 +329,7 @@ public class PipelineDraweeController
     if (mImageOriginListener == null) {
       addImageOriginListener(mDebugOverlayImageOriginListener);
     }
-
+    // Debug Overlay Drawable Debug信息
     if (getControllerOverlay() instanceof DebugControllerOverlayDrawable) {
       DebugControllerOverlayDrawable debugOverlay =
           (DebugControllerOverlayDrawable) getControllerOverlay();
@@ -377,7 +377,7 @@ public class PipelineDraweeController
   }
 
   @Override
-  protected CloseableReference<CloseableImage> getCachedImage() {
+  protected CloseableReference<CloseableImage> getCachedImage() { // 尝试从内存获取解码后的CloseableImage
     if (FrescoSystrace.isTracing()) {
       FrescoSystrace.beginSection("PipelineDraweeController#getCachedImage");
     }

@@ -73,7 +73,7 @@ public class WebpTranscodeProducer implements Producer<EncodedImage> {
         mShouldTranscodeWhenFinished = shouldTranscode(newResult);
       }
 
-      // just propagate result if it shouldn't be transformed
+      // just propagate result if it shouldn't be transformed 如果不需要转码，则直接传给当前Producer的Consumer
       if (mShouldTranscodeWhenFinished == TriState.NO) {
         getConsumer().onNewResult(newResult, status);
         return;
@@ -81,7 +81,7 @@ public class WebpTranscodeProducer implements Producer<EncodedImage> {
 
       if (isLast(status)) {
         if (mShouldTranscodeWhenFinished == TriState.YES && newResult != null) {
-          transcodeLastResult(newResult, getConsumer(), mContext);
+          transcodeLastResult(newResult, getConsumer(), mContext); // 转码后，交给当前Producer的Consumer
         } else {
           getConsumer().onNewResult(newResult, status);
         }
@@ -103,13 +103,13 @@ public class WebpTranscodeProducer implements Producer<EncodedImage> {
             producerContext.getId()) {
           @Override
           protected EncodedImage getResult() throws Exception {
-            PooledByteBufferOutputStream outputStream = mPooledByteBufferFactory.newOutputStream();
+            PooledByteBufferOutputStream outputStream = mPooledByteBufferFactory.newOutputStream();// 转码之后的字节数组
             try {
               doTranscode(encodedImageCopy, outputStream);
               CloseableReference<PooledByteBuffer> ref =
                   CloseableReference.of(outputStream.toByteBuffer());
               try {
-                EncodedImage encodedImage = new EncodedImage(ref);
+                EncodedImage encodedImage = new EncodedImage(ref); // todo 把webp转码成jpg或者png后，生成新的EncodedImage，但是这里元数据为什么还是使用之前webp的？？？
                 encodedImage.copyMetaDataFrom(encodedImageCopy);
                 return encodedImage;
               } finally {
@@ -172,14 +172,14 @@ public class WebpTranscodeProducer implements Producer<EncodedImage> {
     InputStream imageInputStream = encodedImage.getInputStream();
     ImageFormat imageFormat = ImageFormatChecker.getImageFormat_WrapIOException(imageInputStream);
     if (imageFormat == DefaultImageFormats.WEBP_SIMPLE ||
-        imageFormat == DefaultImageFormats.WEBP_EXTENDED) {
+        imageFormat == DefaultImageFormats.WEBP_EXTENDED) { // 有损发webp转码成jpeg
         WebpTranscoderFactory.getWebpTranscoder().transcodeWebpToJpeg(
             imageInputStream,
             outputStream,
             DEFAULT_JPEG_QUALITY);
       encodedImage.setImageFormat(DefaultImageFormats.JPEG);
     } else if (imageFormat == DefaultImageFormats.WEBP_LOSSLESS ||
-        imageFormat == DefaultImageFormats.WEBP_EXTENDED_WITH_ALPHA) {
+        imageFormat == DefaultImageFormats.WEBP_EXTENDED_WITH_ALPHA) { // 无损或者带透明度的webp转码成png
       // In this case we always transcode to PNG
       WebpTranscoderFactory.getWebpTranscoder()
           .transcodeWebpToPng(imageInputStream, outputStream);

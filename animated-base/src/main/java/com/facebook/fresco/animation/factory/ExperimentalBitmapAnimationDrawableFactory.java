@@ -100,7 +100,7 @@ public class ExperimentalBitmapAnimationDrawableFactory implements DrawableFacto
     BitmapFrameRenderer bitmapFrameRenderer =
         new AnimatedDrawableBackendFrameRenderer(bitmapFrameCache, animatedDrawableBackend);
 
-    int numberOfFramesToPrefetch = mNumberOfFramesToPrepareSupplier.get();
+    int numberOfFramesToPrefetch = mNumberOfFramesToPrepareSupplier.get(); // 预加载的帧数
     BitmapFramePreparationStrategy bitmapFramePreparationStrategy = null;
     BitmapFramePreparer bitmapFramePreparer = null;
     if (numberOfFramesToPrefetch > 0) {

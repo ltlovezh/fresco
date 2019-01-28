@@ -705,7 +705,7 @@ public class ProducerSequenceFactory {
         (!mWebpSupportEnabled || WebpSupportStatus.sWebpBitmapFactory == null)) {
       inputProducer = mProducerFactory.newWebpTranscodeProducer(inputProducer);
     }
-    if (mDiskCacheEnabled) {
+    if (mDiskCacheEnabled) { // 磁盘缓存
       inputProducer = newDiskCacheSequence(inputProducer);
     }
     EncodedMemoryCacheProducer encodedMemoryCacheProducer =

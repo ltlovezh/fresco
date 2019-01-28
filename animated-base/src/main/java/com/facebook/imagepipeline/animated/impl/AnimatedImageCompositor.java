@@ -57,7 +57,7 @@ public class AnimatedImageCompositor {
     CloseableReference<Bitmap> getCachedBitmap(int frameNumber);
   }
 
-  private final AnimatedDrawableBackend mAnimatedDrawableBackend;
+  private final AnimatedDrawableBackend mAnimatedDrawableBackend; // 负责具体某帧的绘制
   private final Callback mCallback;
   private final Paint mTransparentFillPaint;
 
@@ -69,18 +69,18 @@ public class AnimatedImageCompositor {
     mTransparentFillPaint = new Paint();
     mTransparentFillPaint.setColor(Color.TRANSPARENT);
     mTransparentFillPaint.setStyle(Paint.Style.FILL);
-    mTransparentFillPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+    mTransparentFillPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));// 保留src图，即用透明去替换指定区域
   }
 
   /**
    * Renders the specified frame. Only should be called on the rendering thread.
-   *
+   * 生成动图的一张完整帧，这里会处理各种Dispose Method和blendOperation
    * @param frameNumber the frame to render
    * @param bitmap the bitmap to render into
    */
   public void renderFrame(int frameNumber, Bitmap bitmap) {
     Canvas canvas = new Canvas(bitmap);
-    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC);
+    canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.SRC); // 清空Bitmap
 
     // If blending is required, prepare the canvas with the nearest cached frame.
     int nextIndex;
@@ -105,13 +105,13 @@ public class AnimatedImageCompositor {
       }
       mAnimatedDrawableBackend.renderFrame(index, canvas);
       mCallback.onIntermediateResult(index, bitmap);
-      if (disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) {
+      if (disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) { //todo 这里为什么在renderFrame之后做呀???
         disposeToBackground(canvas, frameInfo);
       }
     }
 
     AnimatedDrawableFrameInfo frameInfo = mAnimatedDrawableBackend.getFrameInfo(frameNumber);
-    if (frameInfo.blendOperation == BlendOperation.NO_BLEND) {
+    if (frameInfo.blendOperation == BlendOperation.NO_BLEND) { // 默认的绘制会进行像素混合，但是这里frameNumber帧不需要进行混合，那就需要把覆盖区域清除掉
       disposeToBackground(canvas, frameInfo);
     }
     // Finally, we render the current frame. We don't dispose it.
@@ -156,7 +156,7 @@ public class AnimatedImageCompositor {
             try {
               canvas.drawBitmap(startBitmap.get(), 0, 0, null);
               if (frameInfo.disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) {
-                disposeToBackground(canvas, frameInfo);
+                disposeToBackground(canvas, frameInfo); // 擦掉index帧覆盖的部分
               }
               return index + 1;
             } finally {
@@ -171,7 +171,7 @@ public class AnimatedImageCompositor {
             }
           }
         case NOT_REQUIRED:
-          return index + 1;
+          return index + 1; // index帧不需要，那就从下一帧（index + 1）开始
         case ABORT:
           return index;
         case SKIP:
@@ -227,7 +227,7 @@ public class AnimatedImageCompositor {
     }
     AnimatedDrawableFrameInfo currFrameInfo = mAnimatedDrawableBackend.getFrameInfo(index);
     AnimatedDrawableFrameInfo prevFrameInfo = mAnimatedDrawableBackend.getFrameInfo(index - 1);
-    if (currFrameInfo.blendOperation == BlendOperation.NO_BLEND && isFullFrame(currFrameInfo)) {
+    if (currFrameInfo.blendOperation == BlendOperation.NO_BLEND && isFullFrame(currFrameInfo)) { // 当前帧是完整帧，并且当前帧的透明像素不需要跟前面的帧进行混合，即透明像素也会覆盖前面的像素
       return true;
     } else
       return prevFrameInfo.disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND

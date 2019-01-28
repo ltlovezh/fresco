@@ -688,9 +688,9 @@ public class ImagePipeline {
               /* isPrefetch */ false,
               imageRequest.getProgressiveRenderingEnabled()
                   || !UriUtil.isNetworkUri(imageRequest.getSourceUri()),
-              imageRequest.getPriority());
+              imageRequest.getPriority()); // Producer中的ProducerContext
       return CloseableProducerToDataSourceAdapter.create(
-          producerSequence, settableProducerContext, finalRequestListener);
+          producerSequence, settableProducerContext, finalRequestListener); // 创建DataSource
     } catch (Exception exception) {
       return DataSources.immediateFailedDataSource(exception);
     } finally {

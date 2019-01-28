@@ -28,9 +28,9 @@ static void WebpTranscoder_transcodeToJpeg(
     jobject is,
     jobject os,
     jint quality) {
-  auto decodedImagePtr = decodeWebpFromInputStream(env, is, PixelFormat::RGB);
+  auto decodedImagePtr = decodeWebpFromInputStream(env, is, PixelFormat::RGB);// 1.先对webp进行解码成RGB
   RETURN_IF_EXCEPTION_PENDING;
-  encodeJpegIntoOutputStream(env, *decodedImagePtr, os, quality);
+  encodeJpegIntoOutputStream(env, *decodedImagePtr, os, quality);// 2.再对RGB数据，编码成jpeg
 }
 
 static void WebpTranscoder_transcodeToPng(
@@ -39,9 +39,9 @@ static void WebpTranscoder_transcodeToPng(
     jobject is,
     jobject os) {
   using namespace facebook::imagepipeline;
-  auto decodedImagePtr = decodeWebpFromInputStream(env, is, PixelFormat::RGBA);
+  auto decodedImagePtr = decodeWebpFromInputStream(env, is, PixelFormat::RGBA);// 1.先对webp进行解码成RGBA
   RETURN_IF_EXCEPTION_PENDING;
-  encodePngIntoOutputStream(env, *decodedImagePtr, os);
+  encodePngIntoOutputStream(env, *decodedImagePtr, os);// 2.再对RGBA数据，编码成png
 }
 
 static JNINativeMethod gWebpTranscoderMethods[] = {

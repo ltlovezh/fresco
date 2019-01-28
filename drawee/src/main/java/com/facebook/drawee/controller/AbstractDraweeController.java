@@ -453,7 +453,7 @@ public abstract class AbstractDraweeController<T, INFO> implements
     if (FrescoSystrace.isTracing()) {
       FrescoSystrace.beginSection("AbstractDraweeController#submitRequest");
     }
-    final T closeableImage = getCachedImage();
+    final T closeableImage = getCachedImage(); // 尝试从内存获取解码后的closeableImage
     if (closeableImage != null) {
       if (FrescoSystrace.isTracing()) {
         FrescoSystrace.beginSection("AbstractDraweeController#submitRequest->cache");
