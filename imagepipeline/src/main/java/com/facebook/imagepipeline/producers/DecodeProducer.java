@@ -474,7 +474,7 @@ public class DecodeProducer implements Producer<CloseableReference<CloseableImag
       if ((isNotLast(status) || statusHasFlag(status, IS_PARTIAL_RESULT))
           && !statusHasFlag(status, IS_PLACEHOLDER)
           && EncodedImage.isValid(encodedImage)
-          && encodedImage.getImageFormat() == DefaultImageFormats.JPEG) {
+          && encodedImage.getImageFormat() == DefaultImageFormats.JPEG) { // 解码jpeg
         if (!mProgressiveJpegParser.parseMoreData(encodedImage)) {
           return false;
         }

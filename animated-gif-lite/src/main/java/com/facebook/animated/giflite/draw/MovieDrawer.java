@@ -31,7 +31,7 @@ public class MovieDrawer {
     mCanvas = new Canvas();
   }
 
-  public synchronized void drawFrame(int movieTime, int w, int h, Bitmap bitmap) {
+  public synchronized void drawFrame(int movieTime, int w, int h, Bitmap bitmap) { // w和h是当前帧要渲染到的宽高，它不一定等于当前帧真实宽高
     mMovie.setTime(movieTime);
 
     if (mPreviousBitmap != null && mPreviousBitmap.isRecycled()) {
@@ -44,7 +44,7 @@ public class MovieDrawer {
 
     mScaleHolder.updateViewPort(w, h);
 
-    mCanvas.save();
+    mCanvas.save(); // 采用长边对齐，短边留空白的方式，来进行scale（保持比例）
     mCanvas.scale(mScaleHolder.getScale(), mScaleHolder.getScale());
     mMovie.draw(mCanvas, mScaleHolder.getLeft(), mScaleHolder.getTop());
     mCanvas.restore();

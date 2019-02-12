@@ -9,9 +9,9 @@ package com.facebook.animated.giflite.draw;
 
 class MovieScaleHolder {
 
-  private final int mMovieWidth;
+  private final int mMovieWidth; // Gif的完整尺寸
   private final int mMovieHeight;
-  private int mViewPortWidth;
+  private int mViewPortWidth; // 某帧要渲染到的宽高
   private int mViewPortHeight;
   private float mScale = 1f;
   private float mLeft = 0;

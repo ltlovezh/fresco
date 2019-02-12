@@ -68,7 +68,7 @@ public class DefaultImageDecoder implements ImageDecoder {
       };
 
   @Nullable
-  private final Map<ImageFormat, ImageDecoder> mCustomDecoders;
+  private final Map<ImageFormat, ImageDecoder> mCustomDecoders; // 自定义解码器
 
   public DefaultImageDecoder(
       final ImageDecoder animatedGifDecoder,
@@ -103,7 +103,7 @@ public class DefaultImageDecoder implements ImageDecoder {
       final int length,
       final QualityInfo qualityInfo,
       final ImageDecodeOptions options) {
-    if (options.customImageDecoder != null) {
+    if (options.customImageDecoder != null) { // 优先使用定制解码器进行解码
       return options.customImageDecoder.decode(encodedImage, length, qualityInfo, options);
     }
     ImageFormat imageFormat = encodedImage.getImageFormat();

@@ -105,7 +105,7 @@ public class AnimatedImageCompositor {
       }
       mAnimatedDrawableBackend.renderFrame(index, canvas);
       mCallback.onIntermediateResult(index, bitmap);
-      if (disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) { //todo 这里为什么在renderFrame之后做呀???
+      if (disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) { // disposalMethod表示对当前帧的处理策略，这里为绘制下一帧做好准备
         disposeToBackground(canvas, frameInfo);
       }
     }
@@ -158,14 +158,14 @@ public class AnimatedImageCompositor {
               if (frameInfo.disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND) {
                 disposeToBackground(canvas, frameInfo); // 擦掉index帧覆盖的部分
               }
-              return index + 1;
+              return index + 1; // index帧REQUIRED的，且有缓存，则处理下DisposalMethod.DISPOSE_TO_BACKGROUND，就可以当做下一帧的背景了，所以从下一帧开始绘制
             } finally {
               startBitmap.close();
             }
           } else {
-            if (isKeyFrame(index)) {
+            if (isKeyFrame(index)) { // index没有缓存，但是是关键帧，则从index开始绘制
               return index;
-            } else {
+            } else { // 否则继续向前找
               // Keep going.
               break;
             }
@@ -231,7 +231,7 @@ public class AnimatedImageCompositor {
       return true;
     } else
       return prevFrameInfo.disposalMethod == DisposalMethod.DISPOSE_TO_BACKGROUND
-          && isFullFrame(prevFrameInfo);
+          && isFullFrame(prevFrameInfo); // 在绘制当前帧时，前一帧（Disposal Method = DisposalMethod.DISPOSE_TO_BACKGROUND）的区域会被恢复成背景色（恢复成背景色时，不会进行混合）
   }
 
   private boolean isFullFrame(AnimatedDrawableFrameInfo frameInfo) {

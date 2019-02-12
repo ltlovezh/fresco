@@ -18,7 +18,7 @@ import com.facebook.imagepipeline.animated.base.AnimatedImageFrame;
 public class MovieFrame implements AnimatedImageFrame {
 
   private final MovieDrawer mMovieDrawer;
-  private final int mFrameStart;
+  private final int mFrameStart; // 帧开始时间
   private final int mFrameDuration;
   private final int mFrameWidth;
   private final int mFrameHeight;

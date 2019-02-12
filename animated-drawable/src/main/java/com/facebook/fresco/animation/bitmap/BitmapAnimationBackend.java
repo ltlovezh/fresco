@@ -157,7 +157,7 @@ public class BitmapAnimationBackend implements AnimationBackend,
   public boolean drawFrame(
       Drawable parent,
       Canvas canvas,
-      int frameNumber) {
+      int frameNumber) { // 绘制动图的某一帧
     if (mFrameListener != null) {
       mFrameListener.onDrawFrameStart(this, frameNumber);
     }
@@ -169,7 +169,7 @@ public class BitmapAnimationBackend implements AnimationBackend,
       mFrameListener.onFrameDropped(this, frameNumber);
     }
 
-    // Prepare next frames
+    // Prepare next frames 预加载下面3帧
     if (mBitmapFramePreparationStrategy != null && mBitmapFramePreparer != null) {
       mBitmapFramePreparationStrategy.prepareFrames(
           mBitmapFramePreparer,
@@ -180,7 +180,7 @@ public class BitmapAnimationBackend implements AnimationBackend,
 
     return drawn;
   }
-
+  // 首先从缓冲中找当前帧；没有的话，找可重用的Bitmap，然后先把帧绘制到bitmap上，再把bitmap绘制Canvas；没有可重用的bitmap的话，则创建新bitmap，然后先把帧绘制到bitmap上，再把bitmap绘制Canvas；最后实在都不行的话，则返回上一帧数据
   private boolean drawFrameOrFallback(Canvas canvas, int frameNumber, @FrameType int frameType) {
     CloseableReference<Bitmap> bitmapReference = null;
     boolean drawn = false;
@@ -234,7 +234,7 @@ public class BitmapAnimationBackend implements AnimationBackend,
     if (drawn || nextFrameType == FRAME_TYPE_UNKNOWN) {
       return drawn;
     } else {
-      return drawFrameOrFallback(canvas, frameNumber, nextFrameType);
+      return drawFrameOrFallback(canvas, frameNumber, nextFrameType); // 递归
     }
   }
 

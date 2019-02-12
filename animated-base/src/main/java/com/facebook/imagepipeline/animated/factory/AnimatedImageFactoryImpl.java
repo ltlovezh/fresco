@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Decoder for animated images.
+ * Decoder for animated images. 真正负责解码动图（GIF和WEBP）的解码，GIF解码后生成GifImage（未完全解码，只是解析了元数据），WEBP解码后生成WebPImage（未完全解码，只是解析了元数据）
  */
 public class AnimatedImageFactoryImpl implements AnimatedImageFactory {
 

@@ -611,7 +611,7 @@ jobject GifImage_nativeCreateFromByteVector(JNIEnv* pEnv, std::vector<uint8_t>& 
   for (int i = 0; i < pGifFile->ImageCount; i++) {
     SavedImage* pSavedImage = &pGifFile->SavedImages[i];
     GraphicsControlBlock gcp;
-    if (getGraphicsControlBlockForImage(pSavedImage, &gcp)) {
+    if (getGraphicsControlBlockForImage(pSavedImage, &gcp)) { // 解析图形控制扩展，得到每帧的Duration，单位是10ms
       int frameDurationMs = gcp.DelayTime * 10;
       durationMs += frameDurationMs;
       frameDurationsMs.push_back(frameDurationMs);
@@ -625,7 +625,7 @@ jobject GifImage_nativeCreateFromByteVector(JNIEnv* pEnv, std::vector<uint8_t>& 
   // Cache loop count
   spNativeContext->loopCount = spNativeContext->spGifWrapper->getLoopCount();
 
-  // Create the GifImage with the native context.
+  // Create the GifImage with the native context. 根据spNativeContext地址，创建Java层GifImage
   jobject ret = pEnv->NewObject(
       sClazzGifImage,
       sGifImageConstructor,

@@ -96,7 +96,7 @@ import java.util.List;
         case 0x21: // extension
           int extCode = readNextByte();
           switch (extCode) {
-            case 0xff: // application extension
+            case 0xff: // application extension 读取GIF循环次数：LoopCount
               readBlock();
               if (isNetscape()) {
                 readNetscapeExtension();
@@ -115,7 +115,7 @@ import java.util.List;
               skipExtension();
           }
           break;
-        case 0x2C: // image
+        case 0x2C: // image 图像块
           addFrame(control);
           skipImage();
           // count as a frame
@@ -134,7 +134,7 @@ import java.util.List;
   }
 
   private void validateAndIgnoreHeader() throws IOException {
-    readIntoBlock(0 /* offset */, 6 /* length */);
+    readIntoBlock(0 /* offset */, 6 /* length */); // 读取文件头
     boolean valid =
         'G' == (char) block[0]
             && 'I' == (char) block[1]
@@ -145,7 +145,7 @@ import java.util.List;
     if (!valid) {
       throw new IOException("Illegal header for gif");
     }
-
+    // 读取逻辑品父母标识符
     readTwoByteInt(); // width
     readTwoByteInt(); // height
 
@@ -156,7 +156,7 @@ import java.util.List;
     readNextByte(); // bgc index
     readNextByte(); // aspect ratio
 
-    if (hasGlobalColorTable) {
+    if (hasGlobalColorTable) { // 忽略全局颜色表
       ignoreColorTable(globalColorTableSize);
     }
   }
@@ -193,9 +193,9 @@ import java.util.List;
 
     int flags = readNextByte();
     boolean hasLct = (flags & 0x80) != 0;
-    if (hasLct) {
+    if (hasLct) { // 有局部颜色表
       int lctSize = 2 << (flags & 7);
-      ignoreColorTable(lctSize);
+      ignoreColorTable(lctSize); // 忽略局部颜色表
     }
     readNextByte();
     skipExtension();

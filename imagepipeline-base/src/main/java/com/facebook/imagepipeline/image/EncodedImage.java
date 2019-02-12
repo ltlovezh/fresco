@@ -343,7 +343,7 @@ public class EncodedImage implements Closeable {
   }
 
   /** Sets the encoded image meta data. */
-  public void parseMetaData() {
+  public void parseMetaData() { // 解析图片格式
     final ImageFormat imageFormat = ImageFormatChecker.getImageFormat_WrapIOException(
         getInputStream());
     mImageFormat = imageFormat;

@@ -25,7 +25,7 @@ public interface AnimatedImageFrame {
   /**
    * Renders the frame to the specified bitmap. The bitmap must have a width and height that is
    * at least as big as the specified width and height and it must be in RGBA_8888 color format.
-   *
+   * 把当前帧，绘制成width * height的尺寸（当前帧本身的比例可能不是width * height），然后放进bitmap中
    * @param width the width to render to (the image is scaled to this width)
    * @param height the height to render to (the image is scaled to this height)
    * @param bitmap the bitmap to render into

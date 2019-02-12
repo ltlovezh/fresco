@@ -213,7 +213,7 @@ public class AnimatedDrawableBackendImpl implements AnimatedDrawableBackend {
       prepareTempBitmapForThisSize(renderedWidth, renderedHeight);
       frame.renderFrame(frameWidth, frameHeight, mTempBitmap);
       // Temporary bitmap can be bigger than frame, so we should draw only rendered area of bitmap
-      mRenderSrcRect.set(0, 0, renderedWidth, renderedHeight);
+      mRenderSrcRect.set(0, 0, renderedWidth, renderedHeight); // todo 这里的尺寸应当是frameWidth和frameHeight呀
       mRenderDstRect.set(xOffset, yOffset, xOffset + renderedWidth, yOffset + renderedHeight);
 
       canvas.drawBitmap(mTempBitmap, mRenderSrcRect, mRenderDstRect, null);
